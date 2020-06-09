@@ -1,5 +1,7 @@
 
 # Note: This Queue class is sub-optimal. Why?
+
+### first look, it is using a list for a queue, This is inefficient as removing the first index means all of the elements in the array are going to have to be reassigned to a different index. It would be more efficient to use pythongs deque or a linked list
 class Queue():
     def __init__(self):
         self.queue = []
