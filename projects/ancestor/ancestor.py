@@ -21,7 +21,7 @@ def earliest_ancestor(ancestors, starting_node):
     while len(que) > 0:
         current_node = que.popleft()
         if current_node in child_to_parent_graph:
-            # sorting the arr of parent values in descending order, so the greatest valued parent gets popped first
+            # sorting the arr of parent values in descending order, so the greatest valued parent will get popped first, leaving the lesser value as the last current_node
             child_to_parent_graph[current_node].sort(reverse=True)
 
             # adding the parents to the que
@@ -33,6 +33,8 @@ def earliest_ancestor(ancestors, starting_node):
     else:
         return current_node
 
+# Notes;
+#   -No need to tag visited nodes/worry about cycles, the instructions claified that condition
 
 
 
@@ -45,14 +47,3 @@ def earliest_ancestor(ancestors, starting_node):
 # the starting_node is the value of the node
 ## most notably it would be the child node since we are looking at the most distant ancestor
 
-## With the above information we should be able to find the most distant ancestor
-
-# How to navigate the data? What would the end condition be?
-#   - BFT?
-#       - Easiest option I can imagine, 
-#   - DFT?
-#   - recursive DFT?
-
-
-## NOTES: 
-#       -

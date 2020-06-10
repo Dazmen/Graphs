@@ -1,3 +1,6 @@
+import random
+from collections import deque
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -45,8 +48,27 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
 
         # Add users
+        for i in range(num_users):
+            self.add_user(f"Name: {i}")
 
         # Create friendships
+        # Generate all possible friendship combinations
+        possible_friendships = []
+
+        # Avoid duplicates by ensuring the first number is smaller than the second
+        for user_id in self.users:
+            for friend_id in range(user_id + 1, self.last_id + 1):
+                possible_friendships.append((user_id, friend_id))
+
+        # Shuffle the possible friendships
+        random.shuffle(possible_friendships)
+
+        # Create friendships for the first X pairs of the list
+        # X is determined by the formula: num_users * avg_friendships // 2
+        # Need to divide by 2 since each add_friendship() creates 2 friendships
+        for i in range(num_users * avg_friendships // 2):
+            friendship = possible_friendships[i]
+            self.add_friendship(friendship[0], friendship[1])
 
     def get_all_social_paths(self, user_id):
         """
@@ -59,6 +81,28 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+
+        # Create a que for a BFT search
+        que = deque()
+
+        # initialize the que with 1st degree friend paths
+        # if user has no friends, return a sad face
+        if user_id in self.friendships and len(self.friendships[user_id]) > 0:
+            for friend_id in self.friendships[user_id]:
+                que.append([user_id, friend_id])
+        else:
+            return "This user has no friends! :( "
+
+        while len(que) > 0:
+            current_path = que.popleft()
+            current_friend = current_path[-1]
+            
+            if current_friend != user_id and current_friend not in visited:
+                visited[current_friend] = current_path
+
+                for next_friend in self.friendships[current_friend]:
+                    que.append([*current_path, next_friend])
+
         return visited
 
 
